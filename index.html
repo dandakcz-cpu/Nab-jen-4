@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Opel Mokka-e – nabíjení do 80 %</title>
+  <meta name="theme-color" content="#0ea5e9">
+
+  <style>
+    :root{
+      --bg:#0b1020;
+      --card:#0f172a;
+      --card2:#0b1227;
+      --ink:#e5e7eb;
+      --muted:#a5b4fc;
+      --muted2:#94a3b8;
+      --accent:#22c55e;
+      --accent2:#0ea5e9;
+      --ring: rgba(14,165,233,.25);
+      --radius: 22px;
+      --shadow: 0 22px 60px rgba(0,0,0,.45);
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(900px 600px at 15% 0%, rgba(34,197,94,.22), transparent 60%),
+        radial-gradient(900px 600px at 85% 10%, rgba(14,165,233,.22), transparent 55%),
+        linear-gradient(180deg, #050816, #0b1020);
+      min-height:100vh;
+      padding:18px;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+    }
+
+    .app{
+      width:min(560px, 100%);
+      border-radius: var(--radius);
+      overflow:hidden;
+      box-shadow: var(--shadow);
+      border:1px solid rgba(148,163,184,.18);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      backdrop-filter: blur(10px);
+    }
+
+    .hero{
+      position:relative;
+      height: 210px;
+      background:#0b1020;
+      overflow:hidden;
+    }
+    .hero img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position: 60% 40%;
+      display:block;
+      filter: saturate(1.05) contrast(1.05);
+      transform: scale(1.02);
+    }
+    .hero::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(180deg, rgba(5,8,22,.10) 0%, rgba(5,8,22,.55) 55%, rgba(5,8,22,.92) 100%),
+        radial-gradient(800px 300px at 15% 0%, rgba(34,197,94,.35), transparent 55%),
+        radial-gradient(800px 300px at 85% 10%, rgba(14,165,233,.35), transparent 50%);
+      pointer-events:none;
+    }
+
+    .top{
+      position:absolute;
+      left:16px;
+      right:16px;
+      bottom:14px;
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+      z-index:2;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:0;
+    }
+    .badge{
+      align-self:flex-start;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size:12px;
+    }
+    .title{
+      margin:0;
+      font-size:20px;
+      font-weight:950;
+      letter-spacing:-0.02em;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .sub{
+      margin:0;
+      font-size:12px;
+      color: rgba(229,231,235,.88);
+      line-height:1.35;
+    }
+
+    .pill{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:10px 12px;
+      border-radius:999px;
+      background: rgba(2,6,23,.55);
+      border:1px solid rgba(148,163,184,.18);
+      font-weight:800;
+      font-size:12px;
+      color: rgba(229,231,235,.95);
+      white-space:nowrap;
+    }
+    .mono{ font-variant-numeric: tabular-nums; }
+
+    .content{
+      padding:16px;
+      background: linear-gradient(180deg, rgba(15,23,42,.92), rgba(11,18,39,.92));
+      border-top: 1px solid rgba(148,163,184,.14);
+    }
+
+    label{
+      display:block;
+      margin:4px 0 8px;
+      color: rgba(229,231,235,.85);
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:.02em;
+    }
+
+    .inputWrap{
+      display:flex;
+      gap:10px;
+      align-items:stretch;
+    }
+
+    input{
+      width:100%;
+      padding:14px 14px;
+      border-radius:16px;
+      border:1px solid rgba(148,163,184,.22);
+      background: rgba(2,6,23,.35);
+      color: var(--ink);
+      font-size:18px;
+      outline:none;
+      box-shadow: 0 0 0 0 var(--ring);
+      transition: box-shadow .15s, border-color .15s, background .15s;
+    }
+    input:focus{
+      border-color: rgba(14,165,233,.55);
+      box-shadow: 0 0 0 6px var(--ring);
+      background: rgba(2,6,23,.55);
+    }
+
+    .btn{
+      flex:0 0 auto;
+      padding:14px 14px;
+      border-radius:16px;
+      border:1px solid rgba(148,163,184,.20);
+      background: linear-gradient(135deg, rgba(14,165,233,.95), rgba(34,197,94,.92));
+      color: #06121d;
+      font-weight:950;
+      font-size:14px;
+      letter-spacing:.02em;
+    }
+
+    .chips{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap:10px;
+    }
+    .chip{
+      border-radius:16px;
+      padding:12px;
+      border:1px solid rgba(148,163,184,.14);
+      background: rgba(2,6,23,.30);
+    }
+    .chip .k{
+      font-size:11px;
+      color: rgba(148,163,184,.9);
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.10em;
+    }
+    .chip .v{
+      margin-top:6px;
+      font-size:16px;
+      font-weight:950;
+    }
+
+    .warn{
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:16px;
+      background: rgba(245,158,11,.14);
+      border:1px solid rgba(245,158,11,.28);
+      color: #fbbf24;
+      font-weight:800;
+      display:none;
+    }
+
+    .result{
+      margin-top:14px;
+      border-radius:18px;
+      padding:14px;
+      border:1px solid rgba(34,197,94,.22);
+      background:
+        radial-gradient(650px 200px at 10% 0%, rgba(34,197,94,.20), transparent 60%),
+        radial-gradient(650px 200px at 90% 10%, rgba(14,165,233,.20), transparent 55%),
+        rgba(2,6,23,.35);
+      display:none;
+    }
+
+    .resultHead{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+      margin-bottom:10px;
+    }
+    .resultHead .h{
+      font-weight:950;
+      letter-spacing:-0.01em;
+    }
+    .resultHead .s{
+      font-size:12px;
+      color: rgba(148,163,184,.95);
+      margin-top:4px;
+      line-height:1.3;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    .tile{
+      border-radius:18px;
+      padding:12px 12px;
+      border:1px solid rgba(148,163,184,.14);
+      background: rgba(15,23,42,.55);
+    }
+    .tile .k{
+      font-size:11px;
+      color: rgba(148,163,184,.9);
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.10em;
+    }
+    .tile .v{
+      margin-top:6px;
+      font-size:24px;
+      font-weight:950;
+    }
+
+    .footer{
+      margin-top:10px;
+      font-size:12px;
+      color: rgba(148,163,184,.95);
+      line-height:1.35;
+    }
+    .footer b{ color: rgba(229,231,235,.95); }
+
+    @media (max-width: 420px){
+      .hero{ height: 190px; }
+      .chips{ grid-template-columns: 1fr; }
+      .grid{ grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <div class="hero">
+      <!-- Fotka musí být v repozitáři jako "mokka.jpg" -->
+      <img src="mokka.jpg" alt="Opel Mokka-e">
+      <div class="top">
+        <div class="brand">
+          <div class="badge">⚡ OPEL • MOKKA-E</div>
+          <h1 class="title">Nabíjení do 80 %</h1>
+          <p class="sub">Start vždy na další <b>:00</b> nebo <b>:30</b> • Doba vždy zaokrouhlená nahoru</p>
+        </div>
+        <div class="pill mono" id="now">--:--</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <label for="percent">Aktuální stav baterie (%)</label>
+
+      <div class="inputWrap">
+        <input id="percent" type="number" inputmode="numeric" min="0" max="100" placeholder="např. 35">
+        <button class="btn" id="btn">Spočítat</button>
+      </div>
+
+      <div class="warn" id="warn"></div>
+
+      <div class="chips">
+        <div class="chip">
+          <div class="k">Baterie</div>
+          <div class="v"><span class="mono">54</span> kWh</div>
+        </div>
+        <div class="chip">
+          <div class="k">Výkon</div>
+          <div class="v"><span class="mono">11</span> kW</div>
+        </div>
+        <div class="chip">
+          <div class="k">Cíl</div>
+          <div class="v"><span class="mono">80</span> %</div>
+        </div>
+      </div>
+
+      <div class="result" id="resultBox">
+        <div class="resultHead">
+          <div>
+            <div class="h">Nastav do Tesla Wallboxu</div>
+            <div class="s">Čas je zaokrouhlený tak, aby se auto dobilo raději víc než míň.</div>
+          </div>
+          <div class="pill mono" id="duration">--</div>
+        </div>
+
+        <div class="grid">
+          <div class="tile">
+            <div class="k">Od</div>
+            <div class="v mono" id="from">--:--</div>
+          </div>
+          <div class="tile">
+            <div class="k">Do</div>
+            <div class="v mono" id="to">--:--</div>
+          </div>
+        </div>
+
+        <div class="footer">
+          Start: <b>další</b> půlhodina • Doba: <b>nahoru</b> na 30 min • (16:30 → 17:00)
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const BATTERY_KWH = 54;
+  const POWER_KW = 11;
+  const TARGET = 80;
+
+  const elPercent = document.getElementById('percent');
+  const elWarn = document.getElementById('warn');
+  const elNow = document.getElementById('now');
+  const elBtn = document.getElementById('btn');
+
+  const elResultBox = document.getElementById('resultBox');
+  const elFrom = document.getElementById('from');
+  const elTo = document.getElementById('to');
+  const elDuration = document.getElementById('duration');
+
+  // restore last %
+  const saved = localStorage.getItem('mokka_percent');
+  if (saved !== null) elPercent.value = saved;
+
+  function formatTime(d){
+    return d.toLocaleTimeString('cs-CZ', { hour:'2-digit', minute:'2-digit' });
+  }
+
+  // 13:25 -> 13:30, 15:01 -> 15:30, 16:30 -> 17:00
+  function nextHalfHourSlot(date){
+    const d = new Date(date);
+    const m = d.getMinutes();
+    if (m < 30) d.setMinutes(30, 0, 0);
+    else d.setHours(d.getHours() + 1, 0, 0, 0);
+    return d;
+  }
+
+  // always round UP to 30 min
+  function roundUpTo30(minutes){
+    return Math.ceil(minutes / 30) * 30;
+  }
+
+  function setWarn(msg){
+    if (!msg){
+      elWarn.style.display = 'none';
+      elWarn.textContent = '';
+      return;
+    }
+    elWarn.style.display = 'block';
+    elWarn.textContent = msg;
+  }
+
+  function calc(){
+    const raw = elPercent.value.trim();
+    setWarn('');
+    elResultBox.style.display = 'none';
+
+    if (raw === '') return;
+
+    const p = Number(raw);
+    if (!isNaN(p)) localStorage.setItem('mokka_percent', String(p));
+
+    if (isNaN(p) || p < 0 || p > 100){
+      setWarn('Zadej prosím procenta mezi 0–100.');
+      return;
+    }
+
+    if (p >= TARGET){
+      setWarn(`Jsi na ${p} %. Cíl je ${TARGET} % – není potřeba nabíjet.`);
+      return;
+    }
+
+    const neededKwh = BATTERY_KWH * ((TARGET - p) / 100);
+    const rawMinutes = (neededKwh / POWER_KW) * 60;
+    const minutes = roundUpTo30(rawMinutes);
+
+    const start = nextHalfHourSlot(new Date());
+    const end = new Date(start.getTime() + minutes * 60000);
+
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+
+    elFrom.textContent = formatTime(start);
+    elTo.textContent = formatTime(end);
+    elDuration.textContent = `${h}h ${m}m`;
+
+    elResultBox.style.display = 'block';
+  }
+
+  function tick(){
+    elNow.textContent = 'Teď ' + formatTime(new Date());
+  }
+
+  elBtn.addEventListener('click', calc);
+  elPercent.addEventListener('input', calc);
+
+  tick();
+  setInterval(tick, 1000 * 10);
+
+  // initial calc if exists
+  calc();
+</script>
+</body>
+</html>
